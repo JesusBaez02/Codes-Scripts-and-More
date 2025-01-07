@@ -1,5 +1,5 @@
 Funcion de Excel para filtrar registros de una tabla y traerlos a hoja externa.
 
-Tomando en cuenta el mes y fecha buscada.
+Tomando en cuenta el mes, fecha buscada y tabla de indices.
 
 =INDICE(FILTRAR(Tabla3[#Todo], (Tabla3[[#Todo],[Fecha]] = AB25)), SECUENCIA(15), COLUMNA(Tabla3[#Todo])-COLUMNA(Tabla3[[#Encabezados],[IdNo]])+1)

@@ -1,0 +1,35 @@
+Macro para generación de pdf´s.
+
+Sub PDF()
+Application.ScreenUpdating = False
+    
+    ruta = ThisWorkbook.Path & "\"
+    arch = ""
+    Inicio = Range("AB2").Value
+    Fin = Range("AB3").Value
+    una = True
+    Set l1 = ThisWorkbook
+    Set h1 = l1.ActiveSheet
+    For i = Inicio To Fin
+        h1.Range("AB4").Value = i
+        h1.Range("AB5").FormulaR1C1 = i
+        Call qr
+        ' Llama a la macro del botón 3
+        If una Then
+            una = False
+            h1.Copy
+            Set l2 = ActiveWorkbook
+        Else
+            h1.Copy after:=l2.Sheets(l2.Sheets.Count)
+        End If
+        Set h2 = l2.ActiveSheet
+        h1.Cells.Copy
+    Next
+    l2.ExportAsFixedFormat Type:=xlTypePDF, _
+        Filename:=ruta & Format(Now(), "yyyymmddhhmmss") & "_" & i & ".pdf", _
+        Quality:=xlQualityStandard, IncludeDocProperties:=True, _
+        IgnorePrintAreas:=False, OpenAfterPublish:=False
+    l2.Close False
+    Range("AB5") = ""
+    Application.CutCopyMode = False
+End Sub

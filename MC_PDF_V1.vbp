@@ -1,5 +1,3 @@
-Macro para generación de pdf´s.
-
 Sub PDF()
 Application.ScreenUpdating = False
     

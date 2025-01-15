@@ -1,0 +1,21 @@
+Sub RellenarEstrellas()
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Sheets("Informe") ' Cambia "Hoja1" por el nombre de tu hoja
+
+    Dim valor As Integer
+    valor = ws.Range("AC77").Value ' Cambia "A1" por la celda que contiene el valor
+
+    ' Define el color de relleno para las estrellas
+    Dim colorRelleno As Long
+    colorRelleno = RGB(140, 131, 170) ' Dorado
+
+    ' Rellena las estrellas según el valor
+    Dim i As Integer
+    For i = 1 To 5
+        If i <= valor Then
+            ws.Shapes("Estrella" & i).Fill.ForeColor.RGB = colorRelleno
+        Else
+            ws.Shapes("Estrella" & i).Fill.ForeColor.RGB = RGB(255, 255, 255) ' Blanco (sin relleno)
+        End If
+    Next i
+End Sub

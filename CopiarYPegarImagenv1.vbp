@@ -1,0 +1,72 @@
+Sub img()
+    Dim wsOrigen As Worksheet
+    Dim wsDestino As Worksheet
+    Dim img As Picture
+    Dim imgNombre As String
+    Dim posX As Single
+    Dim posY As Single
+    Dim shp As Shape
+    Dim idsPermitidos As Variant
+    Dim idActual As String
+    Dim nuevoNombre As String
+    
+    ' Define las hojas de origen y destino
+    Set wsOrigen = ThisWorkbook.Sheets("Base_") ' Cambia "Imagenes" por el nombre de la hoja de origen
+    Set wsDestino = ThisWorkbook.Sheets("Informe") ' Cambia "REP01" por el nombre de la hoja de destino
+    
+    ' Lee el nombre de la imagen desde una celda de la hoja de destino
+    imgNombre = wsDestino.Range("X21").Value ' Cambia "AP6" por la celda que contiene el nombre de la imagen
+    
+    ' Define la posición en la hoja de destino
+    posX = 198 ' Cambia esto por la posición X deseada en la hoja de destino
+    posY = 306 ' Cambia esto por la posición Y deseada en la hoja de destino
+    
+    ' Define los IDs permitidos
+    idsPermitidos = Array("logo", "logo2", "logo3", "qr")
+    
+    ' Borra las imágenes en la hoja de destino que no tengan los IDs permitidos
+    For Each shp In wsDestino.Shapes
+        If shp.Type = msoPicture Then
+            idActual = shp.Name
+            If Not IsInArray(idActual, idsPermitidos) Then
+                shp.Delete
+            End If
+        End If
+    Next shp
+    
+    ' Busca la imagen en la hoja de origen
+    On Error Resume Next
+    Set img = wsOrigen.Pictures(imgNombre)
+    On Error GoTo 0
+    
+    If img Is Nothing Then
+        MsgBox "La imagen no se encontró en la hoja de origen."
+        Exit Sub
+    End If
+    
+    ' Copia la imagen
+    img.Copy
+    
+    ' Pega la imagen en la hoja de destino en la posición especificada
+    With wsDestino.Pictures.Paste
+        .Top = posY
+        .Left = posX
+        ' Asigna un nuevo nombre a la imagen copiada (ID del producto)
+        nuevoNombre = wsDestino.Range("Z11").Value ' Cambia "AS3" por la celda que contiene el ID del producto
+        .Name = nuevoNombre
+    End With
+    
+    
+End Sub
+
+' Función para verificar si un valor está en un array
+Function IsInArray(val As String, arr As Variant) As Boolean
+    Dim element As Variant
+    IsInArray = False
+    For Each element In arr
+        If val = element Then
+            IsInArray = True
+            Exit Function
+        End If
+    Next element
+End Function

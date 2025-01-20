@@ -1,0 +1,27 @@
+Sub LlenarCeldasAleatorias()
+    Dim ws As Worksheet
+    Dim celda As Range
+    Dim valores(1 To 3) As Variant
+    Dim valorAleatorio As Variant
+    
+    ' Define la hoja de trabajo
+    Set ws = ThisWorkbook.Sheets("REP01") ' Cambia "Hoja1" al nombre de tu hoja de trabajo
+    
+    ' Define los valores posibles
+    valores(1) = 0
+    valores(2) = 1
+    valores(3) = "" ' Vacío
+    
+    ' Recorre cada celda en el rango especificado
+    For Each celda In ws.Range("AI46:AI50,AI81:AI87,AI92:AI94,AI121:AI126") ' Cambia el rango a tus necesidades
+        ' Genera un índice aleatorio entre 1 y 3
+        valorAleatorio = valores(Int((3 - 1 + 1) * Rnd + 1))
+        
+        ' Asigna el valor aleatorio a la celda
+        celda.Value = valorAleatorio
+    Next celda
+    
+    ' Notifica que la operación fue exitosa
+    MsgBox "Celdas llenas con valores aleatorios."
+End Sub
+

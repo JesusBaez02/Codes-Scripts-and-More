@@ -1,0 +1,68 @@
+Sub CrearGrafica()
+
+    Dim wsDatos As Worksheet
+    Dim wsGrafica As Worksheet
+    Dim tabla As ListObject
+    Dim grafico As ChartObject
+    Dim categoriaRango As Range
+    Dim cumplimientoRango As Range
+    Dim topPos As Double
+    Dim leftPos As Double
+    Dim ancho As Double
+    Dim alto As Double
+    Dim serie As Series
+    Dim colorHex As Long
+    
+    ' Establecer las hojas de trabajo
+    Set wsDatos = ThisWorkbook.Sheets("Auxiliar")
+    Set wsGrafica = ThisWorkbook.Sheets("REP01")
+    
+    ' Referenciar la tabla de datos
+    On Error Resume Next
+    Set tabla = wsDatos.ListObjects("Tabla1")
+    On Error GoTo 0
+    
+    If tabla Is Nothing Then
+        MsgBox "No se encontró la tabla 'Tabla1' en la hoja 'Auxiliar'.", vbExclamation
+        Exit Sub
+    End If
+    
+    ' Definir el rango de datos de las columnas de la tabla
+    Set categoriaRango = tabla.ListColumns("Categoria").DataBodyRange
+    Set cumplimientoRango = tabla.ListColumns("Cumplimiento").DataBodyRange
+    
+    ' Definir las coordenadas para la ubicación del gráfico
+    topPos = wsGrafica.Range("B60").Top
+    leftPos = wsGrafica.Range("B60").Left
+    ancho = wsGrafica.Range("AF68").Left + wsGrafica.Range("AF68").Width - leftPos
+    alto = wsGrafica.Range("AF68").Top + wsGrafica.Range("AF68").Height - topPos
+    
+    ' Crear un gráfico en la hoja REP01
+    Set grafico = wsGrafica.ChartObjects.Add(Left:=leftPos, _
+                                             Top:=topPos, _
+                                             Width:=ancho, _
+                                             Height:=alto)
+    
+    ' Configurar el gráfico
+    With grafico.Chart
+        ' Eliminar cualquier serie existente
+        .SeriesCollection.NewSeries
+        
+        ' Añadir la serie de cumplimiento
+        Set serie = .SeriesCollection(1)
+        serie.Name = "Categoria"
+        serie.XValues = categoriaRango
+        serie.Values = cumplimientoRango
+        
+        ' Cambiar el color de la serie
+        colorHex = RGB(47, 85, 151) ' El color hexadecimal #2F5597
+        serie.Format.Fill.ForeColor.RGB = colorHex
+        
+        ' Configuración del gráfico
+        .ChartType = xlColumnClustered ' Tipo de gráfico principal
+        .HasTitle = True
+        .ChartTitle.Text = "Cumplimiento por Categoría"
+    End With
+
+End Sub
+

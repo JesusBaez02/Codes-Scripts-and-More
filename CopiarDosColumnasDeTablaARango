@@ -1,0 +1,49 @@
+Sub CopiarDosColumnasDeTablaARango()
+    Dim wsDatos As Worksheet
+    Dim wsDestino As Worksheet
+    Dim tabla As ListObject
+    Dim columna1 As ListColumn
+    Dim columna2 As ListColumn
+    Dim rangoDestino As Range
+    Dim rangoDatos1 As Range
+    Dim rangoDatos2 As Range
+    Dim filaDestino As Range
+    Dim i As Long
+
+    ' Definir la hoja donde están los datos
+    Set wsDatos = Worksheets("Mantenimiento")
+    
+    ' Definir la hoja donde se copiarán los datos
+    Set wsDestino = Worksheets("Auxiliar")
+    
+    ' Referenciar la tabla en la hoja "Mantenimiento"
+    On Error Resume Next
+    Set tabla = wsDatos.ListObjects("Tabla2") ' Cambia "Tabla3" por el nombre de tu tabla
+    On Error GoTo 0
+    
+    If tabla Is Nothing Then
+        MsgBox "La tabla 'Tabla2' no se encontró en la hoja 'Mantenimiento'.", vbExclamation
+        Exit Sub
+    End If
+    
+    ' Obtener las columnas "Totales defectos" y "Cantidad"
+    Set columna1 = tabla.ListColumns("Descripcion")
+    Set columna2 = tabla.ListColumns("Cantidad")
+    
+    ' Definir los rangos de datos (todas las filas de ambas columnas)
+    Set rangoDatos1 = columna1.DataBodyRange
+    Set rangoDatos2 = columna2.DataBodyRange
+    
+    ' Definir el rango de destino en la hoja "Destino"
+    Set rangoDestino = wsDestino.Range("A1") ' Cambia "A1" por la celda de inicio del rango en la hoja destino
+    
+    ' Descomponer las celdas combinadas en el rango destino
+    wsDestino.Range(rangoDestino, rangoDestino.Offset(rangoDatos1.Rows.Count - 1, 1)).UnMerge
+    
+    ' Copiar los datos de las dos columnas al rango destino
+    For i = 1 To rangoDatos1.Rows.Count
+        wsDestino.Cells(rangoDestino.Row + i - 1, rangoDestino.Column).Value = rangoDatos1.Cells(i, 1).Value
+        wsDestino.Cells(rangoDestino.Row + i - 1, rangoDestino.Column + 1).Value = rangoDatos2.Cells(i, 1).Value
+    Next i
+End Sub
+

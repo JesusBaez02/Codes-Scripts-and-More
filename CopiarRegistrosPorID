@@ -1,0 +1,57 @@
+Sub CopiarRegistrosPorID()
+    Dim wsDatos As Worksheet
+    Dim wsDestino As Worksheet
+    Dim tabla As ListObject
+    Dim columnaID As ListColumn
+    Dim columnaDescripcion As ListColumn
+    Dim rangoDatosID As Range
+    Dim rangoDatosDescripcion As Range
+    Dim rangoDestino As Range
+    Dim idParametro As Variant
+    Dim i As Long
+    Dim destinoFila As Long
+
+    ' Definir la hoja donde están los datos
+    Set wsDatos = Worksheets("BaseDatos")
+    
+    ' Definir la hoja donde se copiarán los datos
+    Set wsDestino = Worksheets("Hoja1")
+    
+    ' Obtener el ID parámetro de la celda E1 en la hoja de destino
+    idParametro = wsDestino.Range("K3").Value
+    
+    ' Referenciar la tabla en la hoja "Mantenimiento"
+    On Error Resume Next
+    Set tabla = wsDatos.ListObjects("Tabla2") ' Cambia "Tabla2" por el nombre de tu tabla
+    On Error GoTo 0
+    
+    If tabla Is Nothing Then
+        MsgBox "La tabla 'Tabla2' no se encontró en la hoja 'Mantenimiento'.", vbExclamation
+        Exit Sub
+    End If
+    
+    ' Obtener las columnas "ID" y "Descripcion" (o la columna que desees copiar)
+    Set columnaID = tabla.ListColumns("id_fecha")
+    Set columnaDescripcion = tabla.ListColumns("Nombre")
+    
+    ' Definir los rangos de datos (todas las filas de las columnas)
+    Set rangoDatosID = columnaID.DataBodyRange
+    Set rangoDatosDescripcion = columnaDescripcion.DataBodyRange
+    
+    ' Definir el rango de destino en la hoja "Auxiliar" y borrar el contenido previo
+    Set rangoDestino = wsDestino.Range("M1") ' Cambia "A1" por la celda de inicio del rango en la hoja destino
+    
+    ' Inicializar la fila de destino
+    destinoFila = rangoDestino.Row
+    
+    ' Copiar los datos que coinciden con el ID
+    For i = 1 To rangoDatosID.Rows.Count
+        If rangoDatosID.Cells(i, 1).Value = idParametro Then
+            wsDestino.Cells(destinoFila, rangoDestino.Column).Value = rangoDatosDescripcion.Cells(i, 1).Value
+            destinoFila = destinoFila + 1
+        End If
+    Next i
+    
+    ' Mensaje de confirmación
+    
+End Sub

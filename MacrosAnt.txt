@@ -1,0 +1,56 @@
+Sub GrabadoraDePDFs()
+'
+' GrabadoraDePDFs Macro
+'
+' Acceso directo: Ctrl+Mayús+M
+'
+
+Dim INNOM As Integer
+Dim ENDNOM As Integer
+Dim CONTADOR As Integer
+Dim MESACUMPLIR As String
+Dim MSG As Integer
+Dim UbFinArc As String
+Dim FechaAEmplear As String
+Dim FechaAEMES As String
+Dim FechaAEAno As String
+Dim Suc As String
+Dim StartTime As Double
+Dim SecondsElapsed As Double
+Dim HoursElapsed As Integer
+Dim MinutesElapsed As Integer
+
+'Insertar direccion dinal de las carpetas
+UbFinArc = "C:\Users\gottec\Desktop\00 - PROPUESTA DM MITA\Entregable\Finanzas\CuentasPorCobrar\Fomatos\Fronchem"
+CONTADOR = 0
+INNOM = InputBox("Cual es el forulario Inicial", "Initial Form", 0)
+ENDNOM = InputBox("Cual es el formulario final", "Final Form", 0)
+MSG = CreateObject("wscript.shell").Popup("Tu primer formulario es " & INNOM & ". Tu ultimo formulario es " & ENDNOM & ".", 10, "Creador De PDFs", 1 + 64)
+'-------IniciaTiempo-----
+StartTime = Timer
+'------------------------
+    If MSG = 1 Then
+        While INNOM <= ENDNOM
+' Aqui abajo cambia la celda por la celda que usas para buscar datos
+            Range("A3").Value = INNOM
+' Aqui abajo cambia la celda por la celda que usas para buscar la fecha
+            FechaAEmplear = Range("AD24").Value
+            FechaAEMES = Month(FechaAEmplear)
+'Puedes cancelar con ' o añadirlo manualmente con otro BOX
+'           Suc = Range("M15").Value
+            ActiveSheet.ExportAsFixedFormat Type:=xlTypePDF, Filename:=UbFinArc & "\" & FechaAEMES & "\" & FechaAEMES & "_" & INNOM & ".pdf", Quality:=xlQualityStandard, IncludeDocProperties:=False, IgnorePrintAreas:=False, OpenAfterPublish:=False
+'           ActiveSheet.ExportAsFixedFormat Type:=xlTypePDF, Filename:=UbFinArc & "\12_" & Suc & "_0.pdf", Quality:=xlQualityStandard, IncludeDocProperties:=False, IgnorePrintAreas:=False, OpenAfterPublish:=False
+            CONTADOR = CONTADOR + 1
+            INNOM = INNOM + 1
+        Wend
+    End If
+'---------TimeCalculation---------
+SecondsElapsed = Round(Timer - StartTime, 2)
+HoursElapsed = Round.Down(SecondsElapsed / 3600)
+SecondsElapsed = SecondsElapsed - (HoursElapsed * 3600)
+MinutesElapsed = Round.Down(SecondsElapsed / 60)
+SecondsElapsed = SecondsElapsed - (MinutesElapsed * 60)
+'---------TimeCalculation---------
+MSG = CreateObject("wscript.shell").Popup("Se generaron " & CONTADOR & " documentos. En " & HoursElapsed & ":" & MinutesElapsed & ":" & SecondsElapsed, 10, "Creador De PDFs Fin", 1 + 64)
+
+End Sub

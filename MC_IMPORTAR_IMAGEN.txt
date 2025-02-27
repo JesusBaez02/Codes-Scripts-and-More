@@ -1,0 +1,27 @@
+Sub Z_INSTALACION_07_IMAGEN_J()
+
+    Dim NOMBRE_HOJA_FORMATO As String, NOMBRE_DE_CARPETA As String, NOMBRE_DE_IMAGEN As String
+    Dim Ruta As String, JDireccion_Imagen As String
+    '____________________________________________
+    
+    NOMBRE_HOJA_FORMATO = "Hoja1"    'coloca el nombre de la hoja de tu formato
+      NOMBRE_DE_CARPETA = "A2"        'coloca la celda de referencia donde esta el nombre de la carpeta de imagenes
+       NOMBRE_DE_IMAGEN = "B2"        'coloca la celda de referencia donde esta el nombre de la la imagen con extencion
+    
+    '____________________________________________
+    Dim HojaFormato As Worksheet
+    Set HojaFormato = ThisWorkbook.Sheets(NOMBRE_HOJA_FORMATO)
+    Dim CarpetaValor As String, ImagenValor As String
+    CarpetaValor = HojaFormato.Range(NOMBRE_DE_CARPETA).Value
+    ImagenValor = HojaFormato.Range(NOMBRE_DE_IMAGEN).Value
+    Ruta = ThisWorkbook.Path & "\"
+    JDireccion_Imagen = Ruta & CarpetaValor & "\" & ImagenValor
+    HojaFormato.Shapes("FGR").Fill.UserPicture (JDireccion_Imagen)
+
+End Sub  '*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****
+Private Sub Workbook_SheetChange(ByVal Sh As Object, ByVal Target As Range)
+
+        'Para ver los cambios en tiempo real corta Desde Private Sub, Hasta End Sub y pega esta parte en ThisWorkbook
+        Z_INSTALACION_07_IMAGEN_J
+
+End Sub

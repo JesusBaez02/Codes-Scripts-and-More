@@ -1,0 +1,56 @@
+Sub IterarYConcatenarValores_ListaVertical()
+    Application.ScreenUpdating = False
+    
+    Dim INICIO As Long, FIN As Long
+    Dim listaValores As String
+    Dim valorCelda As String
+    Dim i As Long
+    Dim l1 As Workbook
+    Dim h1 As Worksheet
+    
+    ' Inicializamos variables
+    listaValores = ""
+    Set l1 = ThisWorkbook
+    Set h1 = l1.ActiveSheet
+    
+    ' Obtener rango de iteración
+    INICIO = h1.Range("CJ5").Value
+    FIN = h1.Range("CJ6").Value
+    
+    ' Iterar de INICIO a FIN y concatenar en lista vertical
+    For i = INICIO To FIN
+        h1.Range("CJ4").Value = i
+        h1.Range("CJ7").FormulaR1C1 = i
+        
+        ' Extraer valor de la celda A1
+        valorCelda = h1.Range("BU176").Value
+        
+        ' Concatenar valores en líneas separadas
+        If listaValores = "" Then
+            listaValores = valorCelda
+        Else
+            listaValores = listaValores & vbCrLf & valorCelda
+        End If
+    Next i
+    
+    ' Copiar al portapapeles usando Windows API
+    CopyToClipboard listaValores
+    
+    ' Mostrar el mensaje con confirmación
+    MsgBox "Lista vertical de valores extraídos (copiada al portapapeles):" & vbCrLf & listaValores, _
+           vbInformation, "Valores Concatenados en Lista Vertical"
+    
+    ' Limpiar valores y estado
+    h1.Range("CJ4").Value = ""
+    Application.CutCopyMode = False
+    Application.ScreenUpdating = True
+End Sub
+
+'---------------------------------------------
+' Subrutina para copiar texto al portapapeles
+'---------------------------------------------
+Sub CopyToClipboard(texto As String)
+    Dim objHTML As Object
+    Set objHTML = CreateObject("htmlfile")
+    objHTML.ParentWindow.ClipboardData.SetData "text", texto
+End Sub

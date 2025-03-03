@@ -1,0 +1,532 @@
+Public UNSC As Object
+Public ONI As Object
+Dim FILA_DE_INICIO As Integer, TIPO_DE_FORMATO As Integer, INICIO As Integer, FIN As Integer
+Dim NOMBRE_HOJA_FORMATO As String, NOMBRE_HOJA_BD As String, COLUMNA_DE_FECHAS As String, COLUMNA_DE_TEXTO As String, NOMBRE_DE_REPORTE As String
+
+Sub CODIGO_02_6en1_NOMBRE_DE_FORMATO_()                 '02_CODIGO_JE_PARA_FORMATOS_6EN1_PDF_JUNTOS
+    Dim J_INDICE As Range
+    '*****************************************************************************************************************************************************
+    '_________Celdas de referencia NOMBRE_HOJA_FORMATO, NOMBRE_HOJA_BD, COLUMNA_DE_FECHAS, COLUMNA_DE_TEXTO, FILA_DE_INICIO_________
+                 
+         NOMBRE_HOJA_FORMATO = "Habilidades_Corte_Operador"               ' colocar entre las comillas el nombre de la hoja/pestaña donde esta EL DISEÑO DE FORMATO
+              NOMBRE_HOJA_BD = "base_corte"          ' colocar entre las comillas el nombre de la hoja/pestaña donde esta LA BASE DE DATOS
+           COLUMNA_DE_FECHAS = "R"                     ' colocar entre las comillas LA LETRA de la COLUMNA donde esta LAS FECHAS DEL FORMATO
+            COLUMNA_DE_TEXTO = "Q"                     ' colocar entre las comillas LA LETRA de la COLUMNA donde esta LOS NOMBRES O TEXTO DE REFERENCIA
+              FILA_DE_INICIO = 2                       ' colocar entre las comillas el numero de fila donde comienzan los datos del formato
+    
+    '_________Celdas de referencia DE  TIPO DE FORMATO, INDICE, INICIO, FIN Y NOMBRE DEL FORMATO_________
+      
+      TIPO_DE_FORMATO = Range("CP4").Value              'CELDA DE REFERENCIA PARA TIPO FORMATO NORMAL, DE FECHAS O TEXTO/NOMBRES
+         Set J_INDICE = Range("CJ4")                    'INDICE O VER
+               INICIO = Range("CJ5").Value              'INICIO
+                  FIN = Range("CJ6").Value              'FIN
+    NOMBRE_DE_REPORTE = Range("CP5").Value              'NOMBRE DEL REPORTE
+    
+    
+    'COPIA TODO
+    '   ****
+    '   ****
+    '   ****
+    ' ********
+    '  ******
+    '   ****
+    '    **
+    '*****************************************************************************************************************************************************
+    Dim l1 As Workbook, l2 As Workbook
+    Dim h1 As Worksheet, h2 As Worksheet
+    Set l1 = ThisWorkbook
+    Set h1 = l1.ActiveSheet
+    '_______________________
+    Dim tiempoInicial As Double
+    Dim tiempoFinal As Double
+    Dim tiempoTotal As Double
+    Dim minutos As Integer
+    Dim segundos As Integer
+    Dim milisegundos As Integer
+    ' Obtener el tiempo inicial
+    tiempoInicial = Timer
+    Dim JRespuesta As String
+    Dim NuevaHoja As Worksheet
+    Dim NombreHoja As String
+    Dim datos As Integer, F As Integer, C As Integer, O As Integer
+    If TIPO_DE_FORMATO = Empty Then
+        ' Código a ejecutar si el valor del tipo de codigo no es 1, 2 ni 3
+        MsgBox "NO SELECCIONASTE EL TIPO DE CODIGO" & vbNewLine & _
+        vbCrLf & _
+        "EL TIPO 1 = CODIGO NORMAL PDF JUNTOS, INICIO Y FIN MANUAL" & vbNewLine & _
+        vbCrLf & _
+        "EL TIPO 2 = CODIGO POR FECHAS PDF JUNTOS, INICIO Y FIN MESES A GENERAR " & _
+        "(INICIO Y FIN DE CADA SECCION DE FECHAS AUTOMATICO)" & vbNewLine & _
+        vbCrLf & _
+        "EL TIPO 3 = CODIGO POR NOMBRES PDF JUNTOS INICIO Y FIN CANTIDAD DE NOMBRES A GENERAR" & _
+        "(INICIO Y FIN DE CADA SECCION DE NOMBRES AUTOMATICO)" & vbNewLine & _
+        vbCrLf & _
+        vbCrLf & _
+        "Emergencia de Prioridad Orden 098831A-1"
+        Exit Sub
+    Else
+        JRespuesta = MsgBox("QUIERES VER LA MACRO ACTUALIZANDOSE" & vbNewLine & _
+        vbCrLf & _
+        "Boton [ Si ] " & vbNewLine & _
+        vbCrLf & _
+        " Veras la hoja actualizarse cambios de pantalla " & vbNewLine & _
+        vbCrLf & _
+        vbCrLf & _
+        "Boton [ No ]" & vbNewLine & _
+        vbCrLf & _
+        " Veras solo el circulo girando hasta terminar la macro " & vbNewLine & _
+        vbCrLf & _
+        " ", vbYesNoCancel)
+        If JRespuesta = vbYes Then
+            JRespuesta = "True"
+            'MsgBox (respuesta)
+        ElseIf JRespuesta = vbNo Then
+            JRespuesta = "False"
+            'MsgBox (respuesta)
+        Else: JRespuesta = vbCancel
+            MsgBox ("Artículo 1 " & vbNewLine & _
+            vbCrLf & _
+            "Para salvaguardar a las Colonias Internas y a la Tierra, ningún CODIGO o MACRO del UNSC debe ser capturado con bases de datos de navegación intactas que puedan conducir a las fuerzas Covenant a centros civiles de población humana." & vbNewLine & _
+            vbCrLf & _
+            "Si alguna fuerza Covenant es detectada:" & vbNewLine & _
+            "Activar la purga selectiva de bases de datos en todas las naves y redes de datos planetarias." & vbNewLine & _
+            "Iniciar el control de bloqueo triple para asegurar que todos los datos han sido eliminados y todas las copias de seguridad han sido neutralizadas." & vbNewLine & _
+            "Ejecutar los eliminadores virales de datos (Descargar desde UNSCTTP://EPWW:COLEPROTOCOL/Virtualscav/fbr.091)" & vbNewLine & _
+            "Retirándose de una fuerza Covenant, todas las naves deben entrar en el Desliespacio con vectores aleatorios NO directamente hacia la Tierra, las Colonias Interiores, o cualquier otro centro de población humana." & vbNewLine & _
+            vbCrLf & _
+            "En caso de una inminente captura por fuerzas Covenant, todos los CODIGOS del UNSC deben autodestruirse."), vbExclamation, "Microsoft Excel Emergencia de Prioridad Orden 098831A-1"
+            Exit Sub
+        End If
+    End If
+       Dim Ruta As String, Orden As String, NumeroFormato As String, Numero As String
+       Dim una As Boolean
+       Dim i As Integer, J_INICIO As Integer, J_FIN As Integer
+    '*****************************************************************************************************************************************************
+    If TIPO_DE_FORMATO = 1 Then '---------------------------------------------------------------------------------------------------------CODIGO_01
+        '*****************************************************************************************************************************************************
+        Application.ScreenUpdating = JRespuesta
+       
+        Ruta = ThisWorkbook.Path & "\"
+        una = True
+        For i = INICIO To FIN
+            J_INDICE.FormulaR1C1 = i
+            ThisWorkbook.RefreshAll
+            If una Then
+                una = False
+                h1.Copy
+                Set l2 = ActiveWorkbook
+            Else
+                h1.Copy After:=l2.Sheets(l2.Sheets.Count)
+            End If
+            Set h2 = l2.ActiveSheet
+            h1.Cells.Copy
+                h2.Cells.Select
+                Selection.Copy
+                Selection.PasteSpecial xlPasteValues
+                Application.CutCopyMode = False
+            
+            DoEvents
+        Next
+        
+        l2.ExportAsFixedFormat Type:=xlTypePDF, _
+        Filename:=Ruta & NOMBRE_DE_REPORTE & ".pdf", _
+        Quality:=xlQualityStandard, IncludeDocProperties:=True, _
+        IgnorePrintAreas:=False, OpenAfterPublish:=False
+        l2.Close False
+        J_INDICE = FIN
+        Application.CutCopyMode = False
+        '*****************************************************************************************************************************************************
+    ElseIf TIPO_DE_FORMATO = 2 Then '-----------------------------------------------------------------------------------------------------CODIGO_02
+        '*****************************************************************************************************************************************************
+        Application.ScreenUpdating = JRespuesta
+        Sheets(NOMBRE_HOJA_BD).Select                      'Se mueve a la hoja donde esta la base de datos
+        SPIRIT_OF_FIRE                                     'Optiene los numero de filas de los rangos de meses de la base de datos
+        l1.Sheets(NOMBRE_HOJA_FORMATO).Select              'Regresa a la hoja donde esta el formato y el boton
+        '*--------------------------------------
+        Dim Txf As String, Nmes As String, NumMes As String, Fif As String, Fff As String
+        Dim Ultf As Integer
+        Txf = "FechaNum_"
+        Nmes = "Nombre_Mes"
+        NumMes = "Numero_Mes"
+        Fif = "Fila_inicio"
+        Fff = "Fila_fin"
+        Ultf = ONI.Count
+        For INICIO = INICIO To FIN '_______________________________INICIO Y FIN DE LAS CELDAS DE REFERENCIA
+            J_INDICE.NumberFormat = "0"
+            J_INDICE.Value = CInt(ONI(Txf & INICIO)(Fif))  'INDICE (esto regenera el indice en cada intervalo de secciones como si pusiera el inicio de cada formnato)
+            J_INICIO = ONI(Txf & INICIO)(Fif)        'INICIO
+            J_FIN = ONI(Txf & INICIO)(Fff)           'FIN
+            Ruta = ThisWorkbook.Path & "\"
+            una = True
+            For i = J_INICIO To J_FIN
+                J_INDICE.FormulaR1C1 = i
+                ThisWorkbook.RefreshAll
+                'h1.PrintOut copies:=1
+                If una Then
+                    una = False
+                    h1.Copy
+                    Set l2 = ActiveWorkbook
+                Else
+                    h1.Copy After:=l2.Sheets(l2.Sheets.Count)
+                End If
+                Set h2 = l2.ActiveSheet
+                h1.Cells.Copy
+                    h2.Cells.Select
+                    Selection.Copy
+                    Selection.PasteSpecial xlPasteValues
+                    Application.CutCopyMode = False
+                DoEvents
+            Next i
+            
+            If ONI(Txf & INICIO)(NumMes) < 10 Then
+                Numero = "0" & ONI(Txf & INICIO)(NumMes)
+            Else
+                Numero = ONI(Txf & INICIO)(NumMes)
+            End If
+            Dim X As Integer
+            X = 10
+            If INICIO < X Then
+                Orden = "0" & INICIO
+            Else
+                Orden = INICIO
+            End If
+            
+            l2.ExportAsFixedFormat Type:=xlTypePDF, _
+            Filename:=Ruta & NOMBRE_DE_REPORTE & "_  " & Orden & "._  " & Numero & "._" & ONI(Txf & INICIO)(Nmes) & " Del " & J_INICIO & " Al " & J_FIN & ".pdf", _
+            Quality:=xlQualityStandard, IncludeDocProperties:=True, _
+            IgnorePrintAreas:=False, OpenAfterPublish:=False
+            l2.Close False
+            J_INDICE = J_FIN
+            Application.CutCopyMode = False
+            '------------------------------
+        Next INICIO
+        '*****************************************************************************************************************************************************
+    ElseIf TIPO_DE_FORMATO = 3 Then '-----------------------------------------------------------------------------------------------------CODIGO_03
+        '*****************************************************************************************************************************************************
+        Application.ScreenUpdating = JRespuesta
+        Sheets(NOMBRE_HOJA_BD).Select                      'Se mueve a la hoja donde esta la base de datos
+        INFINITY_TEXTO                                     'Optiene los numero de filas de los rangos de meses de la base de datos
+        l1.Sheets(NOMBRE_HOJA_FORMATO).Select              'Regresa a la hoja donde esta el formato y el boton
+        '*-----------------------------------
+        Dim Txt As String, Nm As String, Fi As String, Ff As String
+        Dim Ult As Integer
+        Txt = "TextoNum_"
+        Nm = "Nombre_Texto"
+        Fi = "Fila_inicio"
+        Ff = "Fila_fin"
+        Ult = UNSC.Count
+        For INICIO = INICIO To FIN '_______________________________INICIO Y FIN DE LAS CELDAS DE REFERENCIA INFINITY_TEXTO
+            J_INDICE.Value = UNSC(Txt & INICIO)(Fi)  'INDICE (esto regenera el indice en cada intervalo de secciones como si pusiera el inicio de cada formnato)
+            J_INICIO = UNSC(Txt & INICIO)(Fi)        'INICIO
+            J_FIN = UNSC(Txt & INICIO)(Ff)            'FIN
+            Ruta = ThisWorkbook.Path & "\"
+            una = True
+            For i = J_INICIO To J_FIN
+                J_INDICE.FormulaR1C1 = i
+                ThisWorkbook.RefreshAll
+                'h1.PrintOut copies:=1
+                If una Then
+                    una = False
+                    h1.Copy
+                    Set l2 = ActiveWorkbook
+                Else
+                    h1.Copy After:=l2.Sheets(l2.Sheets.Count)
+                End If
+                Set h2 = l2.ActiveSheet
+                h1.Cells.Copy
+                    h2.Cells.Select
+                    Selection.Copy
+                    Selection.PasteSpecial xlPasteValues
+                    Application.CutCopyMode = False
+                DoEvents
+            Next i
+            If INICIO < 10 Then
+                NumeroFormato = "0" & INICIO
+            Else
+                NumeroFormato = INICIO
+            End If
+            
+            l2.ExportAsFixedFormat Type:=xlTypePDF, _
+            Filename:=Ruta & NOMBRE_DE_REPORTE & "_   " & NumeroFormato & ".-  " & UNSC(Txt & INICIO)(Nm) & ".pdf", _
+            Quality:=xlQualityStandard, IncludeDocProperties:=True, _
+            IgnorePrintAreas:=False, OpenAfterPublish:=False
+            l2.Close False
+            J_INDICE = J_FIN
+            Application.CutCopyMode = False
+            '------------------------------
+        Next INICIO
+    '************************************************************************************************************************************************
+    ElseIf TIPO_DE_FORMATO = 4 Then '----------------------------------------------------------------------------listado de inicios y fines de fechas
+    '************************************************************************************************************************************************
+        Sheets(NOMBRE_HOJA_BD).Select                      'Se mueve a la hoja donde esta la base de datos
+        SPIRIT_OF_FIRE                                     'Optiene los numero de filas de los rangos de meses de la base de datos
+        '*-------------
+    Txf = "FechaNum_"
+    Nmes = "Nombre_Mes"
+    Fif = "Fila_inicio"
+    Fff = "Fila_fin"
+    Ultf = ONI.Count
+    '*--------------------------------------------------------------------------------------------
+    NombreHoja = "INICIOS Y FINES Fecha"    ' Cambia "Nombre de la hoja" por el nombre deseado
+    On Error Resume Next
+    Application.DisplayAlerts = False        ' Desactiva las alertas para borrar la hoja sin preguntar al usuario
+    ThisWorkbook.Sheets(NombreHoja).Delete   ' Intenta borrar la hoja (si existe)
+    Application.DisplayAlerts = True         ' Reactiva las alertas
+    On Error GoTo 0                          ' Vuelve a mostrar errores
+    Set NuevaHoja = ThisWorkbook.Sheets.Add(After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
+    NuevaHoja.Name = NombreHoja
+    Range("A1").Value = "Orden de Fechas"
+    Range("B1").Value = "Nombre de mes"
+    Range("C1").Value = "Fila de Inicio"
+    Range("D1").Value = "Fila de Fin"
+    Range("E1").Value = "segmentador"
+    'Dim datos As Integer, F As Integer, C As Integer, O As Integer
+    O = 1
+    For datos = 1 To Ultf
+        F = datos + 1
+        Cells(F, 1).Value = O
+        Cells(F, 2).Value = ONI(Txf & datos)(Nmes)
+        Cells(F, 3).Value = ONI(Txf & datos)(Fif)
+        Cells(F, 4).Value = ONI(Txf & datos)(Fff)
+        O = datos + 1
+    Next
+    Columns("A:D").EntireColumn.AutoFit
+    '************************************************************************************************************************************************
+    ElseIf TIPO_DE_FORMATO = 5 Then '----------------------------------------------------------------------------listado de inicios y fines de texto
+    '************************************************************************************************************************************************
+        Sheets(NOMBRE_HOJA_BD).Select                      'Se mueve a la hoja donde esta la base de datos
+        INFINITY_TEXTO                                     'Optiene los numero de filas de los rangos de meses de la base de datos
+        l1.Sheets(NOMBRE_HOJA_FORMATO).Select              'Regresa a la hoja donde esta el formato y el boton
+        '*-----------------------------------
+    Txt = "TextoNum_"
+    Nm = "Nombre_Texto"
+    Fi = "Fila_inicio"
+    Ff = "Fila_fin"
+    Ult = UNSC.Count
+    '*--------------------------------------------------------------------------------------------
+    NombreHoja = "INICIOS Y FINES Texto"    ' Cambia "Nombre de la hoja" por el nombre deseado
+    On Error Resume Next
+    Application.DisplayAlerts = False        ' Desactiva las alertas para borrar la hoja sin preguntar al usuario
+    ThisWorkbook.Sheets(NombreHoja).Delete   ' Intenta borrar la hoja (si existe)
+    Application.DisplayAlerts = True         ' Reactiva las alertas
+    On Error GoTo 0                          ' Vuelve a mostrar errores
+    Set NuevaHoja = ThisWorkbook.Sheets.Add(After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count))
+    NuevaHoja.Name = NombreHoja
+    Range("A1").Value = "Orden"
+    Range("B1").Value = "Nombre o Texto Encontrado"
+    Range("C1").Value = "Fila de Inicio"
+    Range("D1").Value = "Fila de Fin"
+    'Dim datos As Integer, F As Integer, C As Integer, O As Integer
+    O = 1
+    For datos = 1 To Ult
+        F = datos + 1
+        Cells(F, 1).Value = O
+        Cells(F, 2).Value = UNSC(Txt & datos)(Nm)
+        Cells(F, 3).Value = UNSC(Txt & datos)(Fi)
+        Cells(F, 4).Value = UNSC(Txt & datos)(Ff)
+        O = datos + 1
+    Next
+    Columns("A:D").EntireColumn.AutoFit
+         Exit Sub
+    Else '-------------------------------------------------------------------------------------------------------------------------------------------
+        Exit Sub
+    End If
+    '*****************************************************************************************************************************************************
+    ' Obtener el tiempo final
+    tiempoFinal = Timer
+    ' Calcular el tiempo total transcurrido en segundos
+    tiempoTotal = tiempoFinal - tiempoInicial
+    ' Convertir el tiempo total a minutos, segundos y milisegundos
+    minutos = Fix(tiempoTotal / 60)
+    segundos = Fix(tiempoTotal Mod 60)
+    milisegundos = (tiempoTotal - Fix(tiempoTotal)) * 1000
+    l1.Sheets(NOMBRE_HOJA_FORMATO).Select
+    Dim FechaHora As String, JFechaHora As String
+    Dim RMNUMDEFILA As Integer
+    Dim Alto As Single ' Tamaño de alto en centímetros
+    Dim Ancho As Single ' Tamaño de ancho en centímetros
+         Alto = 1.53
+         Ancho = 6.67
+     JFechaHora = Format(Now, "dd/mmmm/yyyy hh mm AM/PM")
+        If Not J_INDICE.Comment Is Nothing Then
+               J_INDICE.Comment.Delete
+        End If
+        If TIPO_DE_FORMATO = 1 Then
+              J_INICIO = INICIO
+              J_FIN = FIN
+        End If
+    J_INDICE.AddComment
+        With J_INDICE.Comment.Shape
+            .Height = Application.CentimetersToPoints(Alto)
+            .Width = Application.CentimetersToPoints(Ancho)
+        End With
+    J_INDICE.Comment.Text Text:="REGISTRO DE LA UNSC: Este formato se creo por ultima vez el: " & JFechaHora & " " & minutos & " Minutos, " & segundos & " Segundos y " & milisegundos & " Milisegundos." & _
+    " INICIO EN: " & J_INICIO & " Al " & J_FIN
+    Range("J1489").Value = "REGISTRO ABSOLUTO"
+    Range("J1489").Select
+    Do While ActiveCell <> Empty
+        ActiveCell.Offset(1, 0).Select
+    Loop
+    RMNUMDEFILA = ActiveCell.Row
+       
+        'J_INICIO = INICIO - INICIO + 1
+    Range("J" & RMNUMDEFILA).Value = "HISTORIAL: Creado por ultima vez el: " & JFechaHora & " " & _
+    minutos & " Minutos, " & segundos & " Segundos y " & milisegundos & " Milisegundos." & _
+    " TIPO DE FORMATO = " & TIPO_DE_FORMATO & ", INICIO EN: " & J_INICIO & " Al " & J_FIN
+    ' Mostrar el tiempo total en un JMSG BOX
+    MsgBox "Tiempo transcurrido: " & minutos & " Minutos, " & segundos & " Segundos y " & milisegundos & " Milisegundos."
+    Application.CutCopyMode = False
+    '*****************************************************************************************************************************************************
+End Sub '*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****
+Function SPIRIT_OF_FIRE() As Variant
+    Dim nombres As Range, Jcelda As Range
+    Dim i As Integer, ultimaFilaColumna As Integer, JAjuste2 As Integer, NumeromesActual As Integer
+    Dim fecha As Date, fecha_anterior As Date
+    Dim NombremesAnterior As String, NombremesActual As String
+    ultimaFilaColumna = Range(COLUMNA_DE_FECHAS & Rows.Count).End(xlUp).Row
+    Set ONI = CreateObject("Scripting.Dictionary") 'declaro la cracion de un diccionario para almacenar las variables
+    Set nombres = Range(COLUMNA_DE_FECHAS & FILA_DE_INICIO & ":" & COLUMNA_DE_FECHAS & ultimaFilaColumna) ' Establecer el rango de la columna (E) con los nombres
+    fecha_anterior = "1989/12/14"
+    JAjuste2 = FILA_DE_INICIO - 1
+    '********************************************************************************
+    For Each Jcelda In nombres                            ' Iterar sobre cada celda en el rango de nombres
+        Dim fechas As Variant                             ' Obtener el nombre de la celda actual y anterior
+        fecha = Jcelda.Value ' Obtener la fecha de la columna
+        NombremesAnterior = Format(fecha_anterior, "mmmm")  ' Obtener el nombre del mes
+        NombremesActual = Format(fecha, "mmmm") ' Obtener el nombre del mes
+        NumeromesActual = Month(fecha) ' Obtener el número del mes
+        If NombremesActual <> NombremesAnterior Then              ' compara la celda actual con la anterior
+            i = i + 1
+            fechas = "FechaNum_" & i
+        Else
+            fechas = "FechaNum_" & i
+        End If
+        '_______________________________________________________________________________________________________
+        If Not IsEmpty(Jcelda.Value) Then                       ' Verificar si la celda no está vacía
+            If ONI.Exists(fechas) Then                  ' Verificar si el nombre ya existe en el diccionario
+                ONI(fechas)("Fila_fin") = Jcelda.Row - JAjuste2 ' Actualizar la fila de fin del nombre existente
+            Else
+                ' Recordar Agrega un nuevo nombre al diccionario
+                Dim infoFECHAS As Object
+                Set infoFECHAS = CreateObject("Scripting.Dictionary")
+                ' Almacenar la fila de inicio y fila de fin del nombre
+                infoFECHAS("Nombre_Mes") = NombremesActual
+                infoFECHAS("Numero_Mes") = NumeromesActual
+                infoFECHAS("Fila_inicio") = CInt(Jcelda.Row - JAjuste2)
+                infoFECHAS("Fila_fin") = CInt(Jcelda.Row)
+                ' Agregar la información del nombre al diccionario
+                ONI.Add fechas, infoFECHAS
+            End If
+            fecha_anterior = Range(COLUMNA_DE_FECHAS & Jcelda.Row).Value
+        End If
+    Next Jcelda
+    'para verificacion en caso de errores****************************************************************************
+    Dim Txf As String, Nmes As String, NumMes As String, Fif As String, Fff As String
+    Dim Ultf As Integer
+    
+    Txf = "FechaNum_"
+    Nmes = "Nombre_Mes"
+    Fif = "Fila_inicio"
+    Fff = "Fila_fin"
+    Ultf = ONI.Count
+    '*--------------------------------------------------------------------------------------------
+    '*--------------------------------------------------------------------------------------------
+    MsgBox ("Cantidad de Meses encontrados: " & Ultf & vbNewLine & _
+    vbCrLf & _
+    "MES N° 01: " & vbNewLine & _
+    vbCrLf & _
+    ONI(Txf & 1)(Nmes) & "  -   Fila de inicio: " & ONI(Txf & 1)(Fif) & "  -   Fila de fin: " & ONI(Txf & 1)(Fff) & vbNewLine & _
+    vbCrLf & _
+    vbCrLf & _
+    "ULTIMO MES ENCONTRADO N° " & ": " & vbNewLine & _
+    vbCrLf & _
+    ONI(Txf & Ultf)(Nmes) & "  -   Fila de inicio: " & ONI(Txf & Ultf)(Fif) & "  -   Fila de fin: " & ONI(Txf & Ultf)(Fff) & vbNewLine & _
+    vbCrLf & _
+    " ")
+End Function
+Function INFINITY_TEXTO() As Variant
+    Dim nombres As Range, Jcelda As Range
+    'Dim UNSC As Object
+    Dim i As Integer
+    Dim Fila_anterior As String, Fila_actual As String
+    Set UNSC = CreateObject("Scripting.Dictionary") 'declaro la cracion de un diccionario para almacenar las variables
+    ultimaFilaColumna = Range(COLUMNA_DE_TEXTO & Rows.Count).End(xlUp).Row
+    Set nombres = Range(COLUMNA_DE_TEXTO & FILA_DE_INICIO & ":" & COLUMNA_DE_TEXTO & ultimaFilaColumna) ' Establecer el rango de la columna (E) con los nombres
+    JAjuste2 = FILA_DE_INICIO - 1
+    '********************************************************************************
+    For Each Jcelda In nombres                            ' Iterar sobre cada celda en el rango de nombres
+        Dim nombre As Variant                             ' Obtener el nombre de la celda actual y anterior
+        Fila_anterior = Range(COLUMNA_DE_TEXTO & Jcelda.Row - 1).Value
+        Fila_actual = Jcelda.Value
+        If Fila_actual <> Fila_anterior Then              ' compara la celda actual con la anterior
+            i = i + 1
+            nombre = "TextoNum_" & i
+        Else
+            nombre = "TextoNum_" & i
+        End If
+        '_______________________________________________________________________________________________________
+        If Not IsEmpty(Jcelda.Value) Then                       ' Verificar si la celda no está vacía
+            If UNSC.Exists(nombre) Then                  ' Verificar si el nombre ya existe en el diccionario
+                UNSC(nombre)("Fila_fin") = Jcelda.Row - JAjuste2 ' Actualizar la fila de fin del nombre existente
+            Else
+                ' Agregar un nuevo nombre al diccionario
+                Dim infoNombre As Object
+                Set infoNombre = CreateObject("Scripting.Dictionary")
+                ' Almacenar la fila de inicio y fila de fin del nombre
+                infoNombre("Nombre_Texto") = Jcelda.Value
+                infoNombre("Fila_inicio") = CInt(Jcelda.Row - JAjuste2)
+                infoNombre("Fila_fin") = CInt(Jcelda.Row)
+                ' Agregar la información del nombre al diccionario
+                UNSC.Add nombre, infoNombre
+            End If
+        End If
+    Next Jcelda
+    'para verificacion en caso de errores****************************************************************************
+    Txt = "TextoNum_"
+    Nm = "Nombre_Texto"
+    Fi = "Fila_inicio"
+    Ff = "Fila_fin"
+    Ult = UNSC.Count
+    '*--------------------------------------------------------------------------------------------
+    '*--------------------------------------------------------------------------------------------
+    MsgBox ("Cantidad de Nombres Encontrados: " & Ult & vbNewLine & _
+    vbCrLf & _
+    "Nombre N° 01: PRIMERO " & vbNewLine & _
+    vbCrLf & _
+    UNSC(Txt & 1)(Nm) & "  -   Fila de inicio: " & UNSC(Txt & 1)(Fi) & "  -   Fila de fin: " & UNSC(Txt & 1)(Ff) & vbNewLine & _
+    vbCrLf & _
+    vbCrLf & _
+    "Nombre N° " & Ult & ": ULTIMO " & vbNewLine & _
+    vbCrLf & _
+    UNSC(Txt & Ult)(Nm) & "  -   Fila de inicio: " & UNSC(Txt & Ult)(Fi) & "  -   Fila de fin: " & UNSC(Txt & Ult)(Ff) & vbNewLine & _
+    vbCrLf & _
+    " ")
+End Function
+Sub Z_INSTALACION_07_IMAGEN_J()
+
+    Dim NOMBRE_HOJA_FORMATO As String, NOMBRE_DE_CARPETA As String, NOMBRE_DE_IMAGEN As String
+    Dim Ruta As String, JDireccion_Imagen As String
+    '____________________________________________
+    
+    NOMBRE_HOJA_FORMATO = "FORMATO"    'coloca el nombre de la hoja de tu formato
+      NOMBRE_DE_CARPETA = "AJ7"        'coloca la celda de referencia donde esta el nombre de la carpeta de imagenes
+       NOMBRE_DE_IMAGEN = "AJ8"        'coloca la celda de referencia donde esta el nombre de la la imagen con extencion
+    
+    '____________________________________________
+    Dim HojaFormato As Worksheet
+    Set HojaFormato = ThisWorkbook.Sheets(NOMBRE_HOJA_FORMATO)
+    Dim CarpetaValor As String, ImagenValor As String
+    CarpetaValor = HojaFormato.Range(NOMBRE_DE_CARPETA).Value
+    ImagenValor = HojaFormato.Range(NOMBRE_DE_IMAGEN).Value
+    Ruta = ThisWorkbook.Path & "\"
+    JDireccion_Imagen = Ruta & CarpetaValor & "\" & ImagenValor
+    HojaFormato.Shapes("CONTENEDOR").Fill.UserPicture (JDireccion_Imagen)
+
+End Sub  '*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****
+Private Sub Workbook_SheetChange(ByVal Sh As Object, ByVal Target As Range)
+
+        'Para ver los cambios en tiempo real corta Desde Private Sub, Hasta End Sub y pega esta parte en ThisWorkbook
+        Z_INSTALACION_07_IMAGEN_J
+
+End Sub
+
